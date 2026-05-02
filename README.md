@@ -160,6 +160,7 @@ MEXT Scholarship; Global Korea Scholarship
 
 Predicted:
 MEXT Scholarship; Australia Awards Scholarship
+```
 
 In this case:
 
