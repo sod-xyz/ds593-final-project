@@ -1,5 +1,3 @@
-"""Evaluate the final system on English and Mongolian questions."""
-
 from __future__ import annotations
 
 import os

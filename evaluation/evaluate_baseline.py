@@ -1,5 +1,3 @@
-"""Evaluate the no-retrieval LLM label-selection baseline."""
-
 from __future__ import annotations
 
 import os

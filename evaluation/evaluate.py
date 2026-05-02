@@ -1,5 +1,3 @@
-"""Evaluate generation and retrieval quality for all retriever variants."""
-
 from __future__ import annotations
 
 import os

@@ -1,7 +1,6 @@
 from rank_bm25 import BM25Okapi
 from src.chunk_documents import build_chunks
 
-
 class BM25Retriever:
     def __init__(self, chunk_size=600):
         self.chunks = build_chunks(chunk_size=chunk_size)

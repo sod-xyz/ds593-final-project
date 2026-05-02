@@ -1,16 +1,7 @@
-"""LLM wrapper used by the scholarship RAG pipeline.
-
-The rest of the project imports only ``generate_answer``.  Keeping OpenAI
-client creation inside the function makes import-time behavior safer: retrieval
-and evaluation utilities can be inspected without immediately requiring an API
-key.
-"""
-
 from __future__ import annotations
 
 import os
 from typing import Optional
-
 from dotenv import load_dotenv
 from openai import OpenAI
 
@@ -18,17 +9,14 @@ load_dotenv()
 
 DEFAULT_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 
-
 class MissingAPIKeyError(RuntimeError):
     """Raised when generation is requested without an OpenAI API key."""
-
 
 def _get_client() -> OpenAI:
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
         raise MissingAPIKeyError(
-            "OPENAI_API_KEY is not set. Create a .env file or export the key "
-            "before running LLM-based evaluation."
+            "OPENAI_API_KEY is not set. Create a .env file or export the key before running LLM-based evaluation."
         )
     return OpenAI(api_key=api_key)
 
@@ -40,7 +28,6 @@ def generate_answer(
     model: Optional[str] = None,
 ) -> str:
     """Generate a constrained semicolon-separated list of scholarship names.
-
     The prompt intentionally forces extractive behavior: the model may only
     return names from the provided context and from the controlled allowed-name
     list.  Post-processing in ``src.rag`` performs a second safety check.

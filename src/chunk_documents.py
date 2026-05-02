@@ -1,6 +1,5 @@
 from src.load_data import load_documents
 
-
 def chunk_text(text, chunk_size=600, overlap=100):
     words = text.split()
     chunks = []

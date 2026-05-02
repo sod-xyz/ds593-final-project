@@ -1,5 +1,3 @@
-"""Evaluate how the final hybrid RAG system changes as top-k context changes."""
-
 from __future__ import annotations
 
 import os

@@ -1,11 +1,8 @@
-"""Shared evaluation and name-normalization utilities."""
-
 from __future__ import annotations
 
 import re
 import unicodedata
 from typing import Iterable, Sequence
-
 
 def normalize_name(name: str) -> str:
     """Normalize scholarship names for fair exact-match evaluation."""
@@ -36,7 +33,7 @@ def canonicalize_answer_set(names: Iterable[str], allowed_names: Sequence[str]) 
     """Map variant spellings/punctuation to canonical allowed names.
 
     Any item that cannot be mapped is retained under its original name so that
-    unsupported hallucinations remain visible in the error analysis.
+    unsupported hallucinations remain visible in our error analysis.
     """
     canonical = {normalize_name(name): name for name in allowed_names}
     output: set[str] = set()
@@ -64,8 +61,8 @@ def compute_prf(predicted: Iterable[str], expected: Iterable[str]) -> tuple[floa
 def retrieval_metrics(retrieved_names: Sequence[str], expected: Iterable[str], k_values=(1, 3, 5, 10)) -> dict[str, float]:
     """Compute retrieval-only metrics.
 
-    For NONE/no-answer questions, retrieving no documents would be ideal. Since
-    the current retrievers always return documents, these rows are counted as
+    In the case of NONE/no-answer questions, retrieving no documents would be ideal. 
+    Since the current retrievers always return documents, these rows are counted as
     retrieval false positives instead of automatically receiving perfect scores.
     """
     expected = set(expected)

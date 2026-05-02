@@ -1,11 +1,9 @@
 import os
 from openai import OpenAI
 
-
 def looks_mongolian(text: str) -> bool:
     """
-    Detects Mongolian Cyrillic roughly.
-    This is simple but enough for this project.
+    Detects Mongolian Cyrillic. Kinda.
     """
     mongolian_chars = set("өүңӨҮҢ")
     cyrillic_count = sum(1 for ch in text if "\u0400" <= ch <= "\u04FF")
@@ -41,7 +39,6 @@ Return only the English translation.
 Mongolian question:
 {question}
 """
-
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         temperature=0,
@@ -64,7 +61,7 @@ def prepare_question_for_retrieval(question: str) -> tuple[str, str]:
     """
     Returns:
     - retrieval_question: English query used for retrieval
-    - language: 'mn' or 'en'
+    - language: 'mn' for Mongolian or 'en' and English
     """
     if looks_mongolian(question):
         return translate_mongolian_to_english(question), "mn"

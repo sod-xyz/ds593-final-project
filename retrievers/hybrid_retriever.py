@@ -1,14 +1,12 @@
 from collections import defaultdict
-
 from retrievers.bm25_retriever import BM25Retriever
 from retrievers.embedding_retriever import EmbeddingRetriever
-
 
 class HybridRetriever:
     """
     Hybrid retriever using Reciprocal Rank Fusion.
 
-    This combines BM25 lexical retrieval and embedding-based semantic retrieval.
+    This combines our BM25 lexical retrieval and embedding-based semantic retrieval.
     Documents ranked highly by either retriever receive a higher final score.
     """
 

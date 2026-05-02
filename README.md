@@ -2,39 +2,33 @@
 
 Graduate final project for **DS593: Theory and Applications of AI**.
 
-This repository implements and evaluates a retrieval-augmented generation (RAG) assistant designed to help Mongolian scholarship seekers identify relevant international scholarship opportunities. The system is built with Mongolian users in mind, but it is not limited to current students: it can support applicants searching for bachelor’s, master’s, PhD, exchange, and other study-related funding opportunities. The assistant accepts a natural-language question, retrieves scholarship records from a curated corpus, and uses an LLM to return only scholarship names supported by the retrieved evidence.
+This repository implements and evaluates a retrieval-augmented generation (RAG) assistant designed to help Mongolian scholarship seekers identify relevant international scholarship opportunities. The system accepts a natural-language question, retrieves scholarship records from a curated corpus, and uses an LLM to return scholarship names supported by the retrieved evidence.
 
 > **Note:** This project was developed as a graduate course final project and should be treated as a working prototype, not a finised product/tool. Scholarship eligibility criteria, deadlines, funding rules, participating countries, and application requirements change frequently. As such, users/students should verify all recommendations through the official scholarship websites before making application decisions.
 
 ---
 
-## 1. Executive Summary
+## 1. Executive Summary / Motivation
 
-Many Mongolian scholarship seekers face serious barriers when searching for international study opportunities. Scholarship information is often scattered across official websites, written mainly in English, and described using eligibility rules that are difficult to interpret. This creates a major information gap, especially for students outside well-resourced schools.
+Many Mongolian scholarship seekers face a real information-access problem. Scholarship information is scattered across official websites, often written in English, and described using eligibility rules that are difficult to interpret. This can be especially difficult for students who do not have access to college counselors, professional application advisors, or family members who have already studied abroad.
 
-In all Mongolian state public schools, students do not have access to dedicated college counselors or professional application advisors. Instead, guidance often falls to homeroom teachers, who may be responsible for 100–200 students at a single time in a single graduating class. As a result, many students and families are unaware that international scholarships exist, or they do not know how to evaluate whether a program is legitimate, affordable, or open to Mongolian applicants.
+Compared to U.S state schools, in Mongolian state public schools, students do not have access to dedicated college counselors or professional application advisors. Instead, guidance often falls to homeroom teachers, who may be responsible for 100–200 students at a single time in a single graduating class. As a result, many students and families are unaware that international scholarships exist, or they do not know how to evaluate whether a program is legitimate, affordable, or open to Mongolian applicants.
 
 This issue also appeared in an informal observation I conducted in my girlfriend’s younger sister’s graduating class. Among the students in that class, only two students, including my girlfriend’s sister, applied to foreign university or scholarship programs. While this is not a formal survey and should not be interpreted as representative evidence, it helped motivate the project by showing how easily international opportunities can remain unknown even among capable students.
 
-individuals exploit families’ hopes of giving their children better educational and career opportunities, while taking advantage of their limited knowledge of foreign universities, application procedures, language requirements, and scholarship rules. In some cases, families may pay for misleading or fraudulent “admission” or “scholarship” services. Therefore, scholarship search is not only an academic or technical problem, but also a real-world issue of information access, educational equity, and soci-economic protection.
+Individuals exploit families’ hopes of giving their children better educational and career opportunities, while taking advantage of their limited knowledge of foreign universities, application procedures, language requirements, and scholarship rules. In some cases, families may pay for misleading or fraudulent “admission” or “scholarship” services. Therefore, scholarship search is not only an academic or technical problem, but also a real-world issue of information access, educational equity, and soci-economic protection.
 
-A general-purpose LLM can produce fluent scholarship advice, but it may hallucinate scholarship programs, recommend outdated opportunities, or suggest scholarships for which Mongolian applicants are not eligible. This project therefore tests whether a small, domain-specific retrieval-augmented generation system can provide more grounded scholarship recommendations by retrieving from a curated scholarship corpus and forcing the model to return only evidence-supported scholarship names.
+The motivation for this project is that scholarship discovery is not only a search problem; it is also an equity problem. If students cannot find reliable information, they may miss legitimate opportunities or become vulnerable to misleading admission and scholarship services. A general-purpose LLM can give fluent advice, but it may hallucinate scholarship names, recommend outdated opportunities, or suggest programs for which Mongolian applicants are not eligible.
 
-The project compares:
+This project tests whether a small, domain-specific RAG system filled can make scholarship search more grounded. The system compares a no-retrieval LLM baseline with BM25, dense embedding, hybrid retrieval, and a metadata-aware hybrid RAG pipeline. Evaluation treats scholarship recommendation as a set-prediction task: each question has an expected set of scholarship names, and the model is scored using precision, recall, and F1. Retrieval is also evaluated separately using hit@k and retrieval recall@k.
 
-1. a **no-retrieval LLM label-selection baseline**;
-2. a **BM25 lexical retriever**;
-3. a **dense embedding retriever component** using Sentence Transformers;
-4. a **hybrid BM25 + dense retriever** using reciprocal rank fusion;
-5. a final **metadata-aware hybrid RAG system** with query expansion and reranking.
-
-Evaluation is framed as a set prediction problem: each question has a semicolon-separated expected set of scholarship names, and the system is scored using precision, recall, and F1. Retrieval quality is also evaluated separately using hit@k, retrieval recall@k, and retrieval precision@k.
+The final result is a useful prototype and project of reference, but not a deployable advising system. The best-performing English RAG configuration reaches an F1 of about **0.47–0.51**, depending on whether the comparison is basic hybrid retrieval or metadata-aware top-k retrieval. This is better than the no-retrieval label-selection baseline F1 of **0.385**, but still leaves significant errors. The project is therefore best understood as a diagnostic study of what works and fails in a small scholarship-focused RAG system.
 
 ---
 
 ## 2. Research Question
 
-**Can a retrieval-augmented LLM system accurately recommend scholarship names for Mongolian students when questions include constraints such as country, degree level, funding type, language requirement, work experience, and Mongolia eligibility?**
+**Can a retrieval-augmented LLM system accurately recommend scholarship names for Mongolian students when questions include complex constraints such as country, degree level, funding type, language requirement, work experience, and Mongolia eligibility?**
 
 Sub-questions:
 
@@ -54,19 +48,19 @@ Each scholarship record contains:
 
 | Field | Meaning |
 |---|---|
-| `scholarship` | Canonical scholarship name used for evaluation |
+| `scholarship` | Scholarship name used for evaluation |
 | `text` | Short program description |
 | `country` | Destination country or region |
 | `degree_level` | Eligible degree level(s) |
 | `language_requirement` | Whether language requirements are required, conditional, or variable |
-| `language_details` | Details about IELTS, TOEFL, English, Japanese, etc. |
-| `funding_type` | Fully funded, partial, varies, or conditional |
-| `funding_details` | Tuition, stipend, travel, insurance, and related details |
+| `language_details` | Language requirement details about IELTS, TOEFL, English, Japanese, etc. |
+| `funding_type` | Fully funded, partial, varies, conditional, or not applicable |
+| `funding_details` | Tuition, stipend, travel, insurance, and related funding details |
 | `mongolia_eligible` | Eligibility judgment for Mongolian students |
 | `mongolia_eligibility_note` | Caveat explaining uncertainty or conditionality |
-| `source` | Official source URL or source reference |
+| `source` | Official or semi-official source URL |
 
-### Evaluation data
+### Evaluation Data
 
 The repository includes two hand-labeled evaluation sets:
 
@@ -77,17 +71,17 @@ The repository includes two hand-labeled evaluation sets:
 
 Each row contains a question and a semicolon-separated expected answer set.
 
-### Critical dataset limitations
+### Dataset Limitations
 
-The dataset is useful for a focused solo graduate project, but it is not large enough to support claims about real-world scholarship advising quality. The most important limitations are:
+The dataset is intentionally focused, but small. This affects both performance and interpretation.
 
-1. The corpus is small and manually curated.
-2. Some labels encode subjective eligibility judgments, especially for conditional programs.
-3. Several expected answers are debatable because scholarships may depend on citizenship, partner universities, nomination, field, or annual country lists.
-4. The corpus does not include source timestamps or automatic update checks.
+1. The corpus contains a limited number of manually curated scholarship records.
+2. Some labels are subjective because scholarship eligibility is often conditional.
+3. Several expected answers are debatable because eligibility may depend on citizenship, partner universities, field, nomination, or annual country lists.
+4. The corpus does not include source timestamps, deadline checks, or automatic freshness validation.
 5. The evaluation questions are mostly synthetic rather than collected from real Mongolian students.
-
-These limitations should be stated clearly in the final report and presentation.
+6. Some programs are difficult to classify because they are not standard scholarships, such as internships, fellowships, or last-dollar domestic awards.
+7. Because the corpus is small, the LLM baseline can sometimes guess from the allowed label list without true evidence grounding.
 
 ---
 
@@ -111,7 +105,7 @@ Query expansion with synonyms and structured constraints
    |
    v
 Candidate retrieval
-(BM25, dense embeddings, or hybrid RRF)
+(BM25, dense embeddings, or hybrid reciprocal-rank fusion)
    |
    v
 Metadata-aware reranking
@@ -134,31 +128,29 @@ The final pipeline is implemented mainly in `src/rag.py`.
 
 ### 5.1 No-retrieval LLM baseline
 
-The baseline gives the LLM the list of allowed scholarship names but no retrieved context. This is not a random baseline and should not be described as a pure no-information baseline. It is better described as a **no-retrieval label-selection baseline**. It tests whether retrieval adds value beyond the LLM's prior knowledge and the controlled output label list.
+The baseline gives the LLM the list of allowed scholarship names. It tests whether retrieval adds value beyond the LLM's prior knowledge and the controlled output label list.
 
 ### 5.2 BM25 retriever
 
-BM25 performs lexical keyword matching. It is expected to work well for questions with exact terms such as country names, `IELTS`, `PhD`, or `work experience`.
+BM25 performs lexical keyword matching. It is expected to work well for queries containing exact terms such as country names, `IELTS`, `PhD`, `fully funded`, or `work experience`.
 
 ### 5.3 Dense embedding retriever
 
-The embedding retriever uses `sentence-transformers/all-MiniLM-L6-v2` with cosine similarity. It can help when the query and document use different wording, but it may be weaker for strict categorical filters such as country or funding type.
+The embedding retriever uses a sentence-transformer model to search for scholarships based on semantic similarity rather than exact keyword overlap.
 
 ### 5.4 Hybrid retriever
 
-The hybrid retriever combines BM25 and dense retrieval using reciprocal rank fusion. This is intended to keep BM25's exact-match strength while adding semantic retrieval coverage.
+The hybrid retriever combines BM25 and dense retrieval using reciprocal rank fusion. This is designed to preserve BM25's exact-match strength while adding better semantic retrievel coverage.
 
 ### 5.5 Metadata-aware hybrid RAG
 
-The final system extracts simple structured constraints from the question, expands the query with synonyms, retrieves a larger candidate set, reranks candidates using metadata fields, and sends the top-k evidence to the LLM.
-
-This is the strongest conceptual part of the project because it uses the dataset structure instead of treating every record as plain text.
+The final system first searches the scholarship database in two ways: by matching keywords and by finding similar meaning. Then it uses the scholarship details, such as country, degree level, funding type, language requirement, Mongolia eligibility, and work experience, to rank the most relevant results before asking the LLM to choose the final scholarship names.
 
 ---
 
 ## 6. Evaluation Design
 
-This project evaluates the assistant as a **set prediction task**. Each test question has an expected set of scholarship names, and the system also returns a set of predicted scholarship names. Both are written as semicolon-separated lists.
+This project evaluates the "assistant" as a **set prediction task**. Each test question has an expected set of scholarship names, and the system returns a predicted set of scholarship names.
 
 For example:
 
@@ -351,53 +343,145 @@ Before final submission, run the evaluation scripts and paste the final metrics 
 - `reports/results_summary.md`, or
 - selected CSV summaries under a tracked directory such as `reports/results/`.
 
-### Final results table to fill after rerun
+### 7.1 Main Evaluation (English)
 
-| System | Precision | Recall | F1 | Wrong answer rate | Unsupported hallucination rate | Retrieval Recall@5 |
-|---|---:|---:|---:|---:|---:|---:|
-| No-retrieval label-selection baseline | TODO | TODO | TODO | TODO | TODO | N/A |
-| BM25 RAG | TODO | TODO | TODO | TODO | TODO | TODO |
-| Dense embedding RAG | TODO | TODO | TODO | TODO | TODO | TODO |
-| Hybrid RAG | TODO | TODO | TODO | TODO | TODO | TODO |
-| Metadata-aware hybrid RAG | TODO | TODO | TODO | TODO | TODO | TODO |
+| System | Precision | Recall | F1 | Hit@5 | Retrieval Recall@5 | Notes |
+|---|---:|---:|---:|---:|---:|---|
+| No-retrieval label-selection baseline | 0.347 | 0.500 | 0.385 | N/A | N/A | Unsupported hallucination rate = 0.455; wrong-answer rate = 0.836 |
+| BM25 RAG | 0.494 | 0.502 | 0.459 | 0.709 | 0.502 | Strong exact-match baseline |
+| Dense embedding RAG | 0.499 | 0.492 | 0.472 | 0.745 | 0.510 | Best F1 among the three basic retrievers |
+| Hybrid RAG | 0.500 | 0.510 | 0.474 | 0.727 | 0.539 | Best retrieval recall@5 among basic retrievers |
 
-### How to interpret expected outcomes
+**Interpretation.** Retrieval improves over the no-retrieval baseline. The no-retrieval baseline has F1 = **0.385**, while the three RAG systems reach F1 values between **0.459** and **0.474**. This shows that grounding the LLM in retrieved scholarship records helps, but the improvement is moderate rather than dramatic.
 
-If the no-retrieval baseline performs close to or better than RAG, the correct interpretation is **not** that RAG is useless. It means the dataset/evaluation may be too label-driven and too small, allowing the LLM to guess from the allowed label list. In that case, the report should emphasize that future evaluation needs harder questions, source-grounded citation scoring, and real student queries.
+The hybrid retriever has the strongest retrieval recall@5 (**0.539**), meaning it is best at putting relevant scholarship evidence into the context. However, dense embedding RAG has the highest generation F1 among the three basic retrievers (**0.472**). This suggests that retrieval quality and final answer quality are related but not identical. The LLM can still make selection errors even when relevant records are retrieved.
 
-If BM25 beats dense retrieval, that is plausible because scholarship queries often contain exact categorical constraints. If hybrid retrieval performs best, argue that it captures both exact constraints and semantic similarity.
+### 7.2 Metadata-Aware Top-K Experiment
+
+| System | k | Precision | Recall | F1 | Hit@5 | Hit@10 | Retrieval Recall@5 | Retrieval Recall@10 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Metadata-aware hybrid RAG | 5 | 0.506 | 0.519 | 0.482 | 0.818 | 0.836 | 0.539 | 0.578 |
+| Metadata-aware hybrid RAG | 10 | 0.465 | 0.568 | 0.485 | 0.818 | 0.873 | 0.539 | 0.656 |
+| Metadata-aware hybrid RAG | 15 | 0.486 | 0.619 | 0.515 | 0.818 | 0.873 | 0.539 | 0.656 |
+
+**Interpretation.** Increasing top-k improves recall but also increases the amount of context passed to the LLM. The strongest F1 in this experiment occurs at **k = 15**, with F1 = **0.515** and recall = **0.619**. This makes sense for scholarship search because many questions have multiple valid answers. However, larger k can also increase noise, which may cause over-selection.
+
+### 7.3 Chunk-Size Experiment
+
+| Chunk size | Precision | Recall | F1 | Hit@5 | Retrieval Recall@5 |
+|---:|---:|---:|---:|---:|---:|
+| 300 | 0.510 | 0.519 | 0.481 | 0.727 | 0.539 |
+| 600 | 0.506 | 0.538 | 0.484 | 0.727 | 0.539 |
+| 900 | 0.506 | 0.519 | 0.481 | 0.727 | 0.539 |
+
+**Interpretation.** Chunk size had only a small effect. The best F1 was with chunk size **600** at **0.484**. This is expected because each scholarship record is already short and structured. Chunking is more important for long documents, while this corpus behaves more like a collection of compact records.
+
+### 7.4 Multilingual Evaluation
+
+| Language | Precision | Recall | F1 | Hit@5 | Hit@10 | Retrieval Recall@5 | Retrieval Recall@10 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| English | 0.455 | 0.544 | 0.473 | 0.727 | 0.782 | 0.448 | 0.565 |
+| Mongolian | 0.368 | 0.512 | 0.407 | 0.900 | 1.000 | 0.503 | 0.670 |
+
+**Interpretation.** The Mongolian evaluation is not exactly satisfactory. Mongolian questions achieved Hit@10 = **1.000**, meaning that the correct scholarship evidence usually appears somewhere in the top 10 retrieved records. However, Mongolian F1 = **0.407**, lower than English F1 = **0.473**. This suggests that translation and answer selection remain weaker than retrieval alone. Perhaps maybe a cause of how I phrased the question as Mongolian words have a lot of nuances so some things could be lost in translation.
+
+The multilingual pipeline works by detecting Mongolian Cyrillic in `src/multilingual.py`, translating the query into English with an OpenAI model when an API key is available, and then using the same English retrieval pipeline. If no API key is available, the system returns the original Mongolian question, which can reduce retrieval quality because the corpus is mostly English, but in our results case it performed as intended.
+
+---
 
 ---
 
 ## 8. Error Analysis Plan
 
-After running evaluation, inspect the lowest-F1 rows in the result CSVs and classify each failure:
+The evaluation shows that the system is semi-successful: retrieval helps, but many questions remain difficult especially when complex, multi-filter requirements are included.
 
-| Error type | Description | Example |
+| Error type | What it means | Why it happened in this project |
 |---|---|---|
-| Retrieval miss | Correct scholarship not in retrieved top-k | Country-specific scholarship absent from retrieved records |
-| Over-selection | System returns too many loosely relevant scholarships | “Fully funded” query includes partial awards |
-| Under-selection | System omits correct scholarships | Only one of several expected Japan scholarships returned |
-| Metadata conflict | Metadata and raw text imply different eligibility | Program marked conditional but expected as available |
-| Label ambiguity | Expected answer set is debatable | Rhodes or Mastercard eligibility may depend on route |
-| Name mismatch | Punctuation or naming variation affects scoring | `ADB-JSP` vs full official name |
-| Multilingual failure | Translation loses a key constraint | Mongolian phrase for UK or master’s not preserved |
-| LLM selection error | Correct evidence retrieved, but LLM chooses wrong names | Retrieved context contains answer but output omits it |
+| Retrieval miss | Correct scholarship does not appear in top-k | Small corpus, inconsistent wording, or metadata not specific enough |
+| Over-selection | System returns too many scholarships | Broad queries such as “fully funded” retrieve many superficially relevant records |
+| Under-selection | System returns only part of a multi-answer set | Some questions have several valid answers, but the LLM selects only the most obvious ones |
+| Label ambiguity | Expected answer set is debatable | Programs may be conditional, country-specific, or dependent on current cycles |
+| Metadata conflict | Metadata and question imply different eligibility | Some scholarships are marked conditional or not eligible but still appear in expected labels |
+| Name mismatch | Same scholarship appears under slightly different names | Hyphen/en-dash and official-name variations affect exact matching |
+| Multilingual loss | Mongolian query loses a constraint during translation | Translation may preserve country but weaken degree/funding/work-experience constraints |
+| Small-corpus limitation | The correct answer may be outside the curated corpus | The system cannot recommend opportunities that are not in `documents.json` |
 
-The final report should include at least 5 concrete error examples.
+### Specific Examples:
+
+1. **Broad Mongolia eligibility query:** The baseline returned a very large list for “Which scholarships are available to Mongolian students?” It achieved high recall but low precision. This illustrates why recall alone is not enough.
+2. **Country-specific retrieval:** Japan and South Korea queries worked relatively well because country metadata is explicit and scholarship names are distinctive.
+3. **Conditional eligibility:** Questions about scholarships that “require checking eligibility” are difficult because conditional programs are not always clearly positive or negative examples and would require either contacting the school/state/program coordinators or fine-checking every detail on the large websites.
+4. **Funding questions:** “Fully funded” questions often over-select because many programs mention stipends, tuition, or support, but the exact coverage varies. For some programs fully funded refers to tuition, while others refer to tuition and housing, while others need to include one-time or two-time travel stipend (common since Mongolia is still a developing country and a lot of these programs are development programs).
+5. **Mongolian queries:** Retrieval often finds at least one correct record, but the final answer still loses F1 because translation, reranking, and answer selection introduce additional error points.
 
 ---
 
-## 9. Reproducibility Instructions
+## 9. Iteration and Reflection
 
-### 9.1 Clone the repository
+This project changed substantially during inception, development and final submission.
+
+### 9.1 Initial Web-Scraping Attempt
+
+My first plan was to scrape scholarship information directly from official websites and build a larger corpus automatically. This turned out to be harder than expected. Scholarship websites had inconsistent HTML structure, dynamic pages that required techniques like Selenium and clicking, PDF announcements, country-specific subpages, and changing application-cycle pages. Some pages blocked or limited scraping, while others mixed general program descriptions with current-cycle details. Even when scraping technically worked, the extracted text was noisy and difficult to convert into consistent fields such as degree level, funding type, and Mongolia eligibility.
+
+Because of this, I decided that a smaller manually curated corpus would be more reliable for a course project than a larger but noisy scraped dataset. This reduced coverage, but it significantly improved interpretability and made evaluation possible.
+
+### 9.2 Synthetic Data Attempt
+
+After discussing the project direction my professor, I also tried creating synthetic scholarship records and synthetic queries to expand the evaluation set. This initially seemed useful because the real corpus was small. However, synthetic records created a new problem: they overcrowded the corpus with artificial examples that did not reflect real scholarship pages. The system began retrieving synthetic patterns rather than learning from real scholarship descriptions. This made the results less meaningful for the actual use case and made it very difficult to interpret my results and draw valuable findings.
+
+In the end, I decided not to rely on synthetic scholarship records for final evaluation. I used a curated real corpus (expanded by 2x) and accepted that the dataset was small. This was a better match for the project goal because the assistant is supposed to help Mongolian students with real scholarship opportunities, not artificial examples, and I had personal experience/knowledge of them.
+
+### 9.3 Kaggle Dataset Attempt
+
+I also considered using public Kaggle scholarship datasets. However, many of the available datasets were U.S.-focused, undergraduate-focused, or not clearly relevant to Mongolian applicants. Including them would have increased the number of records but weakened the project scope much similar to the synthetic data attempt. Since the research question focuses on Mongolian students and international opportunities, adding many U.S.-only scholarships would have made retrieval noisier and less useful. More data =/= Better data.
+
+
+### 9.4 Final Design Decision
+
+The final system uses a small, curated corpus with metadata-specific retrieval. This made the project semi-successful. The evaluation shows that retrieval improves over a no-retrieval baseline, especially for country-specific and structured queries. However, the scores also show that the system is not ready for real deployment. The small corpus limits coverage, and the manually written labels make some evaluation cases debatable.
+
+### 9.5 What I would do next
+
+1. Expand the corpus using more official scholarship pages and information. Possibly creating a whole database.
+2. Add a `last_checked` field for every source.
+3. Possibly store citations and evidence snippets with each answer.
+4. Collect real questions from Mongolian students.
+5. Add unit tests for answer parsing, name normalization, and retrieval metrics.
+6. Build a simple user interface in Mongolian and English.
+7. Evaluate answer helpfulness with human reviewers, not only exact-match F1.
+
+---
+
+
+## 10. Ethical Considerations and Limitations
+
+This system affects users who may be making important education and financial decisions. A wrong scholarship recommendation can waste time, create false hope, or cause a student to miss a better opportunity.
+
+Main risks:
+
+- **Hallucination:** the LLM may return unsupported scholarships.
+- **Retrieval bias:** scholarships missing from the corpus are invisible to the system.
+- **Outdated information:** deadlines, eligibility rules, and country lists change frequently.
+- **False confidence:** fluent LLM output can make uncertain advice look reliable.
+- **Language inequality:** Mongolian-language users may receive weaker results if translation fails.
+- **Metadata errors:** incorrect fields can lead to wrong filtering or ranking.
+- **Evaluation bias:** manually written expected answers may omit reasonable alternatives.
+- **Privacy risk:** a real advising system might collect sensitive applicant data such as grades, income, citizenship, disability status, or family background.
+
+This project reduces some risk by constraining the model to known scholarship names and evaluating unsupported hallucinations. However, those safeguards are not enough for real deployment. A production version would need citations, source freshness checks, uncertainty labels, human review, and privacy protections.
+
+
+## 11. Reproducibility Instructions
+
+### 11.1 Clone the repository
 
 ```bash
-git clone <your-repo-url>
+git clone <https://github.com/sod-xyz/ds593-final-project>
 cd ds593-final-project
 ```
 
-### 9.2 Create a virtual environment
+### 11.2 Create a virtual environment
 
 Windows PowerShell:
 
@@ -413,14 +497,14 @@ python -m venv .venv
 source .venv/bin/activate
 ```
 
-### 9.3 Install dependencies
+### 11.3 Install dependencies
 
 ```bash
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 9.4 Configure the API key
+### 11.4 Configure the API key
 
 Create a `.env` file in the project root:
 
@@ -431,26 +515,26 @@ OPENAI_MODEL=gpt-4o-mini
 
 The OpenAI key is required for final answer generation and Mongolian-to-English translation. Retrieval classes can be inspected without the key, but LLM-based evaluation cannot be reproduced without it.
 
-### 9.5 Run evaluations
+### 11.5 Run evaluations
 
 ```bash
-# No-retrieval label-selection baseline
+# No-retrieval Label-Selection Baseline
 python -m evaluation.evaluate_baseline
 
-# BM25, dense embedding, and hybrid RAG comparison
+# BM25, Dense Embedding, and Hybrid RAG Comparison
 python -m evaluation.evaluate
 
-# Top-k sensitivity for metadata-aware hybrid RAG
+# Top-k Sensitivity for Metadata-Aware Hybrid RAG
 python -m evaluation.evaluate_k
 
-# English vs Mongolian evaluation
+# English vs Mongolian Evaluation
 python -m evaluation.evaluate_multilingual
 
-# Chunk-size experiment
+# Chunk-Size Experiment
 python -m evaluation.evaluate_chunks
 ```
 
-### 9.6 Expected output files
+### 11.6 Expected output files
 
 | File | Description |
 |---|---|
@@ -467,7 +551,7 @@ python -m evaluation.evaluate_chunks
 
 ---
 
-## 10. Repository Structure
+## 12. Repository Structure
 
 ```text
 .
@@ -505,59 +589,11 @@ python -m evaluation.evaluate_chunks
 
 ---
 
-## 11. Ethical Considerations for the RAG/LLM System
-
-This project uses a retrieval-augmented generation system, so the main ethical concerns come from both the retrieval component and the language model component. Even when the system is designed to return only scholarship names from retrieved context, it can still produce misleading results if retrieval is incomplete, the corpus is outdated, or the LLM interprets the context incorrectly.
-
-The main ethical risks include:
-
-- **Hallucination:** the LLM may return scholarship names or claims that are not fully supported by the retrieved records.
-- **Retrieval bias:** the system can only retrieve from the scholarships included in the corpus, so missing records become invisible to the user.
-- **Outdated knowledge:** scholarship deadlines, eligibility rules, country lists, and funding conditions change frequently, so a static limited corpus can quickly become unreliable.
-- **False confidence:** fluent LLM output may make uncertain or incomplete recommendations appear more reliable than they are.
-- **Language inequality:** if translation or Mongolian-language query handling is weak, users who cannot search well in English may still receive worse results. Our current evaluation level may not be at a satisfactory level to negate this inequality.
-- **Metadata errors:** incorrect or incomplete fields such as country, degree level, nationality, or funding type can cause the system to filter out relevant scholarships or recommend unsuitable ones.
-- **Evaluation bias:** manually written test questions and expected answers may not capture all valid scholarships, which can make the system appear better or worse than it really is.
-- **Privacy risk:** a real large-scale deployment may require sensitive applicant personal information such as their grades, income, sex, parents salary, nationality, disability status, or migration goals. Such data would need strong privacy protections.
-
-This project reduces some risk by using retrieval, limiting outputs to known scholarship names (personally selected), and evaluating unsupported hallucinations. However, these safeguards are no where enough for real-world use cases and future developments would need to consider more regarding the ethical impacts and risks of the this tool.
-
----
-
-## 12. Iteration and Reflection
-
-The project improved from a basic RAG prototype into a more structured retrieval pipeline.
-
-What improved:
-
-- Added BM25, dense, and hybrid retrievers.
-- Added a no-retrieval baseline.
-- Added metadata fields and metadata-aware reranking.
-- Added query expansion.
-- Added retrieval and generation metrics.
-- Added Mongolian-language evaluation.
-
-What remains weak:
-
-- Evaluation labels are manually created and sometimes debatable.
-- The dataset is small and may be too easy for label-selection.
-- Results are not committed in the uploaded repository.
-- The system returns only names, not evidence snippets or citations.
-- The chunk-size experiment is not very meaningful because most records are short.
-- Multilingual evaluation depends on OpenAI translation and is not fully deterministic.
-
-Next steps:
-
-1. Expand the corpus using official pages and store `last_checked` dates.
-2. Add source citations and evidence snippets to every answer.
-3. Evaluate with real student queries.
-4. Add a deterministic metadata-filter baseline.
-5. Add confidence labels: `eligible`, `conditional`, `verify`, `not eligible`.
-6. Track all final result summaries in `reports/results/`.
-
----
 
 ## 13. References
+This was my first time building a complete RAG pipeline, so the project involved a significant amount of learning, experimentation, debugging, and iteration. I relied heavily on concepts introduced in class discussions, course labs, and portfolio pieces.
+
+In addition to course materials, I referenced external resources such as documentation, tutorials, research papers, and example repositories to better understand how to structure and implement different parts of the system. Some of the most useful sources are listed below, although I may have consulted additional materials during development that are not included here.
 
 - Lewis, P., et al (2020). *Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks*. Advances in Neural Information Processing Systems. 
 - Robertson, S., & Zaragoza, H. (2009). *The Probabilistic Relevance Framework: BM25 and Beyond*. Foundations and Trends in Information Retrieval, 3(4), 333-389. 

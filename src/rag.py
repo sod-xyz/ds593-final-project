@@ -20,7 +20,6 @@ def get_allowed_names():
 
 
 # Query understanding
-
 COUNTRY_SYNONYMS = {
     "japan": ["japan", "japanese"],
     "uk": ["uk", "united kingdom", "britain", "british", "england"],
@@ -53,7 +52,7 @@ def contains_phrase(text, phrase):
     """
     Checks whether a phrase appears as a full word/phrase,
     not as a substring inside another word.
-    Stops U.S and us matching.
+    Stops U.S and just the word "us" from matching.
     """
     text = text.lower()
     phrase = phrase.lower()
@@ -114,8 +113,8 @@ def understand_query(question):
 
 def expand_query(question, query_info):
     """
-    Adds useful synonyms to improve retrieval.
-    Example: 'UK' becomes 'United Kingdom Britain British'.
+    Adds useful synonyms to improve retrieval. 
+    e.g: 'UK' becomes 'United Kingdom Britain British'.
     """
     expansion_terms = []
 
@@ -151,10 +150,7 @@ def expand_query(question, query_info):
     return question + " " + " ".join(unique_terms)
 
 
-# -----------------------------
-# Evidence formatting
-# -----------------------------
-
+# Evidence formatting and metadata-aware reranking
 def doc_search_text(d):
     return " ".join([
         d.get("text", ""),
@@ -192,8 +188,6 @@ Reranks retrieved evidence using simple metadata-based heuristics.
 def metadata_score(question, doc, query_info):
     """
     Scores retrieved documents using structured query constraints.
-
-    This reranks evidence AFTER retrieval. It does not replace retrieval.
     """
     text = doc_search_text(doc)
     score = 0
@@ -239,7 +233,6 @@ def metadata_score(question, doc, query_info):
 
     return score
 
-
 def rerank_docs(question, docs, query_info):
     """
     Reranks retrieved candidate documents using metadata-aware scoring.
@@ -273,7 +266,6 @@ def dedupe_docs(docs):
 
 
 # Main RAG function
-
 def answer_with_rag(
     question,
     retriever,
@@ -287,7 +279,7 @@ def answer_with_rag(
     Metadata-aware RAG pipeline.
 
     Steps:
-    1. Understand the query.
+    1. Understand the inputted query.
     2. Expand query terms for retrieval.
     3. Retrieve a larger candidate set.
     4. Rerank retrieved evidence using metadata.
@@ -328,7 +320,7 @@ def answer_with_rag(
 
     # Normalize the LLM output back to the canonical allowed names.
     # This protects evaluation from small punctuation differences and prevents
-    # unsupported names outside the controlled corpus from being returned.
+    # unsupported names outside the controlled source from being returned.
     allowed_list = get_allowed_name_list()
     allowed_by_norm = {normalize_name(n): n for n in allowed_list}
     parsed = parse_answer(raw_answer)
