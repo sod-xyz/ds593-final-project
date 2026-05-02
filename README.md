@@ -1,6 +1,6 @@
 # Finding the Right Scholarships: A RAG System for Mongolian Students
 
-Graduate final project for **DS593: Theory and Applications of AI**.
+Graduate final project for **DS593: Theory and Applications of LLM**.
 
 This repository implements and evaluates a retrieval-augmented generation (RAG) assistant designed to help Mongolian scholarship seekers identify relevant international scholarship opportunities. The system accepts a natural-language question, retrieves scholarship records from a curated corpus, and uses an LLM to return scholarship names supported by the retrieved evidence.
 
