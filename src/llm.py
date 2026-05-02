@@ -1,21 +1,65 @@
+"""LLM wrapper used by the scholarship RAG pipeline.
+
+The rest of the project imports only ``generate_answer``.  Keeping OpenAI
+client creation inside the function makes import-time behavior safer: retrieval
+and evaluation utilities can be inspected without immediately requiring an API
+key.
+"""
+
+from __future__ import annotations
+
 import os
-from openai import OpenAI
+from typing import Optional
+
 from dotenv import load_dotenv
+from openai import OpenAI
 
 load_dotenv()
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+DEFAULT_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 
 
-def generate_answer(question, context, allowed_names):
+class MissingAPIKeyError(RuntimeError):
+    """Raised when generation is requested without an OpenAI API key."""
+
+
+def _get_client() -> OpenAI:
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        raise MissingAPIKeyError(
+            "OPENAI_API_KEY is not set. Create a .env file or export the key "
+            "before running LLM-based evaluation."
+        )
+    return OpenAI(api_key=api_key)
+
+
+def generate_answer(
+    question: str,
+    context: str,
+    allowed_names: str,
+    model: Optional[str] = None,
+) -> str:
+    """Generate a constrained semicolon-separated list of scholarship names.
+
+    The prompt intentionally forces extractive behavior: the model may only
+    return names from the provided context and from the controlled allowed-name
+    list.  Post-processing in ``src.rag`` performs a second safety check.
+    """
+
     prompt = f"""
 You are a scholarship retrieval assistant for Mongolian students.
 
-Use ONLY the provided context.
-Return ONLY scholarships that satisfy ALL conditions in the question.
-Do NOT include partially relevant scholarships.
-Do NOT guess.
-Do NOT explain.
+Task:
+Return only the scholarship names that are supported by the provided context and
+that satisfy every constraint in the question.
+
+Rules:
+- Use ONLY the provided context as evidence.
+- Return ONLY names from the allowed scholarship list.
+- Do NOT include partially relevant scholarships.
+- Do NOT infer eligibility if the context says eligibility is conditional.
+- Do NOT explain.
+- Do NOT add bullets, numbering, or extra words.
 
 Return format:
 Scholarship A; Scholarship B; Scholarship C
@@ -33,15 +77,12 @@ Question:
 {question}
 """
 
+    client = _get_client()
     response = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model=model or DEFAULT_MODEL,
         messages=[{"role": "user", "content": prompt}],
-        temperature=0
+        temperature=0,
     )
 
     answer = response.choices[0].message.content
-
-    if answer is None:
-        return "NONE"
-
-    return answer.strip()
+    return answer.strip() if answer else "NONE"

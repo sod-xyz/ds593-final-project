@@ -4,19 +4,21 @@ __pycache__/
 *.pyo
 *.pyd
 
-# Virtual environment
+# Virtual environments
 venv/
 .venv/
 
-# Environment variables
+# Environment variables and secrets
 .env
 .env.*
 
-# Generated indexes / data
-
-# Results / outputs
+# Generated local results and logs
 results/
 *.log
+
+# Keep curated report artifacts trackable
+!reports/
+!reports/**
 
 # OS files
 .DS_Store

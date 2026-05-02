@@ -309,7 +309,7 @@ def answer_with_rag(
 
     # Rerank retrieved evidence using metadata-aware scoring.
     if use_metadata_reranking:
-        docs = rerank_docs(question, docs, query_info)
+        docs = rerank_docs(retrieval_question, docs, query_info)
 
     docs = dedupe_docs(docs)
 
@@ -343,6 +343,7 @@ def answer_with_rag(
             "language": language,
             "retrieval_question": retrieval_question,
             "retrieval_query": retrieval_query,
+            "expanded_query": retrieval_query,
             "num_candidate_docs": candidate_k,
             "num_final_docs": len(docs),
             "context": context,
