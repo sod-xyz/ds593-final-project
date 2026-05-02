@@ -1,0 +1,18 @@
+Swiss Government Excellence Scholarships (Switzerland)
+
+Overview:
+Swiss Government Excellence Scholarships (Switzerland). The Swiss Government Excellence Scholarships are mainly intended for talented early-career researchers from abroad who have already completed a master's degree or PhD. They support postgraduate research at Swiss universities, universities of applied sciences, federal institutes of technology, or research institutes. Research applicants generally need support from an academic supervisor in Switzerland.
+
+Degree Level:
+- Research / PhD / Postdoctoral / Arts
+
+Language Requirement:
+- Requirement type: conditional
+- Details: Depends on host institution and research supervisor requirements
+
+Funding:
+- Funding type: fully_funded_with_stipend
+- Details: Typically provides monthly stipend, health insurance, and support for research stay; exact benefits vary by scholarship type.
+
+Source:
+https://www.sbfi.admin.ch/en/swiss-government-excellence-scholarships

@@ -1,0 +1,18 @@
+New Zealand Scholarships (New Zealand)
+
+Overview:
+New Zealand Scholarships (New Zealand). New Zealand government scholarships have supported students from eligible countries to study in New Zealand or the Pacific, often with a development focus. Eligibility depends heavily on country, priority sector, and scholarship type. Applicants should check the official New Zealand scholarships website for current eligible countries, study levels, and application cycles.
+
+Degree Level:
+- Undergraduate / Postgraduate depending on country
+
+Language Requirement:
+- Requirement type: required
+- Details: English proficiency required
+
+Funding:
+- Funding type: fully_funded_with_stipend
+- Details: Typically covers tuition, living allowance, establishment allowance, travel, medical insurance, and other study costs.
+
+Source:
+https://www.nzscholarships.govt.nz/

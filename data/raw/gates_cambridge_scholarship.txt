@@ -1,0 +1,18 @@
+Gates Cambridge Scholarship (United Kingdom)
+
+Overview:
+Gates Cambridge Scholarship (United Kingdom). The Gates Cambridge Scholarship supports outstanding applicants from outside the United Kingdom to pursue a full-time postgraduate degree at the University of Cambridge. The program selects scholars based on academic excellence, leadership potential, and commitment to improving the lives of others.
+
+Degree Level:
+- Master's / PhD
+
+Language Requirement:
+- Requirement type: required
+- Details: English proficiency required
+
+Funding:
+- Funding type: fully_funded_with_stipend
+- Details: Typically covers university composition fee, maintenance allowance, airfare, visa, and health surcharge.
+
+Source:
+https://www.gatescambridge.org/

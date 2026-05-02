@@ -1,0 +1,18 @@
+Global Korea Scholarship (South Korea)
+
+Overview:
+Korean Government Scholarship Program / Global Korea Scholarship (South Korea). The Global Korea Scholarship is a Korean government scholarship programme designed to invite outstanding international students to study at higher education institutions in Korea. Selected students may receive support such as airfare, Korean language training, tuition, and a monthly allowance. Applicants may apply through an embassy track or university track depending on the programme and application cycle.
+
+Degree Level:
+- Undergraduate / Master's / PhD
+
+Language Requirement:
+- Requirement type: conditional
+- Details: Korean or English depending on program; language training often provided
+
+Funding:
+- Funding type: fully_funded_with_stipend
+- Details: Typically covers airfare, tuition, settlement allowance, monthly allowance, Korean language training, and insurance.
+
+Source:
+https://www.studyinkorea.go.kr/in/plan/scholarship.do

@@ -1,0 +1,18 @@
+Erasmus Mundus Joint Master Degrees (European Union)
+
+Overview:
+Erasmus Mundus Joint Master Degrees (European Union). Erasmus Mundus Joint Masters are prestigious international master's programmes jointly designed and delivered by groups of higher education institutions. They usually involve study in at least two countries and may include study, research, traineeship, thesis preparation, and defense. Scholarships may be available for selected students.
+
+Degree Level:
+- Master's
+
+Language Requirement:
+- Requirement type: varies
+- Details: Depends on specific program and universities
+
+Funding:
+- Funding type: fully_funded_with_stipend
+- Details: Scholarships for selected students typically cover participation costs, travel contribution, and monthly living allowance.
+
+Source:
+https://erasmus-plus.ec.europa.eu/opportunities/individuals/students/erasmus-mundus-joint-masters

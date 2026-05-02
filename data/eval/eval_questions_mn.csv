@@ -1,0 +1,11 @@
+question,expected_answers,question_type,language
+Монгол оюутнууд Японд ямар тэтгэлэгт хамрагдах боломжтой вэ,MEXT Scholarship; JICA Scholarships; Asian Development Bank-Japan Scholarship Program,country,mn
+Их Британид магистрт сурахад ямар бүрэн санхүүжилттэй тэтгэлэг байна вэ,Chevening Scholarship; Commonwealth Scholarship and Fellowship Plan; Gates Cambridge Scholarship,country,mn
+IELTS шаарддаг тэтгэлгүүд аль нь вэ,Chevening Scholarship; Gates Cambridge Scholarship; Commonwealth Scholarship and Fellowship Plan,language,mn
+Магистрын түвшинд бүрэн санхүүжилттэй ямар тэтгэлгүүд байна вэ,Chevening Scholarship; Erasmus Mundus Joint Master Degrees; MEXT Scholarship; Global Korea Scholarship,degree,mn
+Монгол оюутнуудад Солонгост сурах ямар тэтгэлэг байна вэ,Global Korea Scholarship,country,mn
+Хятад улсад сурах тэтгэлэг аль нь вэ,Chinese Government Scholarship; Schwarzman Scholars,country,mn
+Докторын түвшний тэтгэлгүүд аль нь вэ,DAAD Scholarships; Swiss Government Excellence Scholarships; Vanier Canada Graduate Scholarships; Fulbright U.S. Student Program,degree,mn
+Бүрэн санхүүжилттэй тэтгэлгүүдийг жагсаа,Chevening Scholarship; MEXT Scholarship; Global Korea Scholarship; Erasmus Mundus Joint Master Degrees; Stipendium Hungaricum,funding,mn
+Судалгааны чиглэлийн тэтгэлэг аль нь вэ,Fulbright U.S. Student Program; DAAD Scholarships; Swiss Government Excellence Scholarships; Vanier Canada Graduate Scholarships,general,mn
+АНУ-д сурахад ямар тэтгэлэг байна вэ,Fulbright U.S. Student Program; Knight-Hennessy Scholars; The Gates Scholarship; AAUW International Fellowships,country,mn

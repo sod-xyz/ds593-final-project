@@ -1,0 +1,18 @@
+Chevening Scholarship (United Kingdom)
+
+Overview:
+Chevening Scholarship (United Kingdom). Chevening Scholarships enable outstanding emerging leaders from around the world to pursue one-year master's degrees in the United Kingdom. Applicants usually need strong academic preparation, leadership potential, and a clear plan for using the UK education to address local, national, or global challenges. Chevening is relevant for students seeking fully funded master's study in the UK, especially those with leadership experience and career goals connected to public service, development, policy, business, or civil society.
+
+Degree Level:
+- Master's
+
+Language Requirement:
+- Requirement type: required
+- Details: English proficiency required (IELTS/TOEFL typically required)
+
+Funding:
+- Funding type: fully_funded_with_stipend
+- Details: Typically covers tuition, travel costs, visa costs, and monthly living allowance.
+
+Source:
+https://www.chevening.org/scholarships/

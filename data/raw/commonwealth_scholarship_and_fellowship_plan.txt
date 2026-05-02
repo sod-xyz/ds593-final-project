@@ -1,0 +1,18 @@
+Commonwealth Scholarship and Fellowship Plan (United Kingdom / Commonwealth countries)
+
+Overview:
+Commonwealth Scholarship and Fellowship Plan. Commonwealth Scholarships support students from eligible Commonwealth countries to pursue postgraduate study, professional development, or research opportunities. Eligibility, participating countries, and degree levels depend on the specific Commonwealth scholarship route. Applicants should check whether their citizenship country is eligible before applying. Mongolia is not a Commonwealth country, so this is usually not a primary option for Mongolian citizens unless a specific route says otherwise.
+
+Degree Level:
+- Master's / PhD / Fellowship
+
+Language Requirement:
+- Requirement type: required
+- Details: English proficiency required
+
+Funding:
+- Funding type: fully_funded_with_stipend
+- Details: Many Commonwealth awards cover tuition, airfare, living allowance, and other approved costs; exact benefits depend on route.
+
+Source:
+https://cscuk.fcdo.gov.uk/scholarships/

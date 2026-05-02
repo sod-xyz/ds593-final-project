@@ -1,0 +1,26 @@
+The Gates Scholarship (United States high school seniors only)
+
+The Gates Scholarship supports outstanding low-income high school seniors in the United States. It is different from Gates Cambridge and is not an international graduate scholarship.
+
+Mongolia Eligibility:
+- Mongolian citizens are not eligible unless they are U.S. citizens, nationals, or permanent residents and meet the U.S. high school and Pell eligibility requirements.
+
+Eligibility:
+- Applicants must be high school seniors.
+- Applicants must be Pell-eligible.
+- Applicants must be U.S. citizens, U.S. nationals, or permanent residents.
+- Applicants must plan to enroll full-time in a U.S. four-year degree program.
+
+Degree Level:
+- Undergraduate
+
+Language Requirement:
+- Requirement type: required
+- Details: English proficiency is expected because the program is for U.S. undergraduate study.
+
+Funding:
+- Funding type: fully_funded_with_stipend
+- Details: Last-dollar scholarship support toward the full cost of attendance not already covered by other financial aid and family contribution.
+
+Source:
+https://www.thegatesscholarship.org/scholarship

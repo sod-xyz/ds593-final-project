@@ -1,0 +1,25 @@
+NSF Graduate Research Fellowship Program (United States citizens, nationals, or permanent residents)
+
+The NSF Graduate Research Fellowship Program supports outstanding graduate students in research-based master's and doctoral degrees in STEM fields. It is a major U.S. fellowship but is restricted by citizenship or permanent residency.
+
+Mongolia Eligibility:
+- Mongolian citizens are not eligible unless they are U.S. citizens, U.S. nationals, or U.S. permanent residents.
+
+Eligibility:
+- Applicants must be U.S. citizens, U.S. nationals, or permanent residents at the time of application.
+- Applicants must pursue or plan to pursue a research-based master's or doctoral degree in an eligible STEM field.
+- Applicants must meet NSF rules on prior graduate study and previous fellowship acceptance.
+
+Degree Level:
+- Research-based Master's / PhD
+
+Language Requirement:
+- Requirement type: required
+- Details: English proficiency is required for U.S. graduate study, but the fellowship itself is primarily citizenship- and field-based.
+
+Funding:
+- Funding type: fully_funded_with_stipend
+- Details: Provides annual stipend and cost-of-education allowance for eligible graduate study.
+
+Source:
+https://www.nsfgrfp.org/applicants/applicant-eligibility.html

@@ -1,0 +1,18 @@
+Google Generation Scholarship (Multiple countries / regional)
+
+Overview:
+Google Generation Scholarship. The Generation Google Scholarship supports students pursuing computer science or related technical degrees, with regional versions such as Asia Pacific depending on the cycle. Applicants are usually evaluated on academic background, leadership, and commitment to diversity, equity, and inclusion in technology. Eligibility varies by region and year.
+
+Degree Level:
+- Undergraduate / Computer science depending on region
+
+Language Requirement:
+- Requirement type: conditional
+- Details: Depends on region; English generally expected
+
+Funding:
+- Funding type: partial
+- Details: Provides a fixed scholarship award amount; does not usually cover full tuition and living costs.
+
+Source:
+https://buildyourfuture.withgoogle.com/scholarships/generation-google-scholarship-apac

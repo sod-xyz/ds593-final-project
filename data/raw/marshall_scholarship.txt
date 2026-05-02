@@ -1,0 +1,25 @@
+Marshall Scholarship (United Kingdom, U.S. citizens only)
+
+The Marshall Scholarship finances young Americans of high ability to study for a graduate degree in the United Kingdom. It is a prestigious scholarship, but it is restricted to U.S. citizens.
+
+Mongolia Eligibility:
+- Mongolian citizens are not eligible unless they also hold U.S. citizenship and meet the U.S. degree requirements.
+
+Eligibility:
+- Applicants must be citizens of the United States.
+- Applicants must hold a first undergraduate degree from an accredited four-year college or university in the United States.
+- Applicants must meet the GPA and timing requirements for the application cycle.
+
+Degree Level:
+- Master's / Graduate study
+
+Language Requirement:
+- Requirement type: required
+- Details: English proficiency is required because study takes place at UK universities.
+
+Funding:
+- Funding type: fully_funded_with_stipend
+- Details: Typically covers university fees, living costs, travel, and other approved expenses.
+
+Source:
+https://www.marshallscholarship.org/apply/eligibility/

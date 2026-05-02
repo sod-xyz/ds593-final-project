@@ -1,0 +1,18 @@
+Chinese Government Scholarship (China)
+
+Overview:
+Chinese Government Scholarship (China). The Chinese Government Scholarship supports international students studying in China. For Mongolia-specific embassy announcements, eligibility may include Mongolian citizenship, health requirements, degree-level age limits, and academic background requirements such as high school graduation for undergraduate study, bachelor's degree for master's study, and master's degree for doctoral study. Applicants should check the Chinese Embassy in Mongolia and the official CSC study-in-China application system for current eligibility and procedures.
+
+Degree Level:
+- Undergraduate / Master's / PhD / General Scholar
+
+Language Requirement:
+- Requirement type: conditional
+- Details: Chinese or English depending on program and university
+
+Funding:
+- Funding type: fully_funded_with_stipend
+- Details: Usually covers tuition, accommodation, stipend, and medical insurance; exact coverage depends on scholarship category.
+
+Source:
+https://mn.china-embassy.gov.cn/eng/zytz/202511/t20251113_11752783.htm

@@ -1,0 +1,18 @@
+Schwarzman Scholars (China)
+
+Overview:
+Schwarzman Scholars (China). The Schwarzman Scholars program is a highly selective international scholarship program at Tsinghua University in Beijing. It focuses on leadership, global affairs, and China studies. The program is conducted in English and brings together students from around the world for a one-year master's degree.
+
+Degree Level:
+- Master's
+
+Language Requirement:
+- Requirement type: required
+- Details: Program is conducted in English; proficiency required
+
+Funding:
+- Funding type: fully_funded_with_stipend
+- Details: Typically covers tuition, room and board, travel, books and supplies, health insurance, and stipend.
+
+Source:
+https://www.schwarzmanscholars.org/

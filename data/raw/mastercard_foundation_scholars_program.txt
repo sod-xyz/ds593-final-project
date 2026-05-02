@@ -1,0 +1,18 @@
+Mastercard Foundation Scholars Program (Multiple countries / partner institutions)
+
+Overview:
+Mastercard Foundation Scholars Program. The Mastercard Foundation Scholars Program partners with universities and organizations to support talented young people, especially from Africa and other eligible contexts depending on partner rules, to access education and leadership development. The programme often combines scholarship support with mentoring, leadership training, transition support, and community impact goals. Eligibility depends on the partner institution and programme.
+
+Degree Level:
+- Secondary / Undergraduate / Master's depending on partner
+
+Language Requirement:
+- Requirement type: conditional
+- Details: Depends on partner institution requirements
+
+Funding:
+- Funding type: fully_funded_with_stipend
+- Details: Often covers tuition, accommodation, books, living support, mentoring, and other academic support, depending on partner institution.
+
+Source:
+https://mastercardfdn.org/all/scholars/

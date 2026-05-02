@@ -1,0 +1,18 @@
+Fulbright Program (USA)
+
+Overview:
+Fulbright Foreign Student Program (USA). The Fulbright Foreign Student Program enables graduate students, young professionals, and artists from abroad, including Mongolia through country-specific competitions, to study or conduct research in the United States. For Mongolian applicants, the program is mainly relevant for graduate-level study. Applicants should check the U.S. Embassy in Mongolia and Fulbright Foreign Student Program pages for citizenship, residence, degree, English proficiency, work experience, and application requirements.S. master's study, academic exchange, leadership, public service, and graduate education.
+
+Degree Level:
+- Graduate / Master's / Research
+
+Language Requirement:
+- Requirement type: required
+- Details: English proficiency required (TOEFL/IELTS typically required)
+
+Funding:
+- Funding type: fully_funded_with_stipend
+- Details: Typically covers tuition, travel, health insurance, and living stipend; exact benefits depend on country program.
+
+Source:
+https://mn.usembassy.gov/fulbright-student-program/

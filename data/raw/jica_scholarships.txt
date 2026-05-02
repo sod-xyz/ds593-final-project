@@ -1,0 +1,18 @@
+JICA Scholarships (Japan)
+
+Overview:
+JICA Scholarships. JICA offers long-term training and scholarship programmes connected to Japan's development cooperation, including programmes for government officials, researchers, and future leaders from partner countries. Examples include SDGs Global Leader and JDS-related programmes in some countries. These opportunities often support master's or doctoral study in Japan and are commonly linked to public sector capacity building, development policy, and human resource development. Eligibility depends strongly on country office, government nomination, and programme type.
+
+Degree Level:
+- Master's / PhD / Long-term training
+
+Language Requirement:
+- Requirement type: conditional
+- Details: English or Japanese depending on program
+
+Funding:
+- Funding type: fully_funded_with_stipend
+- Details: Typically covers tuition, living allowance, travel, and related training expenses depending on programme.
+
+Source:
+https://www.jica.go.jp/english/activities/schemes/grant_aid/types_jds.html

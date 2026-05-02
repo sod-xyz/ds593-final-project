@@ -1,0 +1,18 @@
+Stipendium Hungaricum (Hungary)
+
+Overview:
+Stipendium Hungaricum (Hungary). Stipendium Hungaricum is Hungary's government scholarship programme for international students. It supports full-degree and partial study opportunities in Hungarian higher education institutions, usually through agreements with sending partners in eligible countries. Applicants normally apply through the official application system and the responsible sending partner in their home country.
+
+Degree Level:
+- Bachelor's / Master's / PhD / Partial study
+
+Language Requirement:
+- Requirement type: conditional
+- Details: Hungarian or English depending on program
+
+Funding:
+- Funding type: fully_funded_with_stipend
+- Details: Typically covers tuition exemption, monthly stipend, accommodation contribution, and medical insurance.
+
+Source:
+https://stipendiumhungaricum.hu/

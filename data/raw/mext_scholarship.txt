@@ -1,0 +1,18 @@
+MEXT Scholarship (Japan)
+
+Overview:
+MEXT Scholarship (Japan). The Japanese Government MEXT Scholarship supports international students who wish to study in Japan at Japanese universities and other institutions. MEXT has several categories, including undergraduate students, research students, teacher training students, Japanese studies students, college of technology students, specialized training college students, and Young Leaders Program students. Research student applicants generally need to be eligible for admission to a Japanese graduate school and meet age and academic requirements. Applicants usually apply through an embassy recommendation or university recommendation route.
+
+Degree Level:
+- Undergraduate / Master's / PhD / Research
+
+Language Requirement:
+- Requirement type: conditional
+- Details: Japanese or English depending on program and university
+
+Funding:
+- Funding type: fully_funded_with_stipend
+- Details: Typically covers tuition, monthly stipend, and travel support.
+
+Source:
+https://www.studyinjapan.go.jp/en/planning/scholarships/mext-scholarships/

@@ -1,0 +1,18 @@
+Türkiye Scholarships (Turkey)
+
+Overview:
+Türkiye Scholarships (Turkey). Türkiye Scholarships is a government-funded scholarship programme for international students. It offers opportunities for associate, bachelor's, master's, PhD, research, and other scholarship categories. The programme is designed as a comprehensive scholarship that may include university placement, tuition support, accommodation, health insurance, and academic, social, and cultural activities. Applicants must meet academic and age criteria for their intended degree level and apply through the official Türkiye Scholarships portal.
+
+Degree Level:
+- Associate / Bachelor's / Master's / PhD / Research
+
+Language Requirement:
+- Requirement type: conditional
+- Details: Turkish or English depending on program; language training may be provided
+
+Funding:
+- Funding type: fully_funded_with_stipend
+- Details: Typically covers tuition, monthly stipend, accommodation, health insurance, Turkish language course, and travel support.
+
+Source:
+https://www.turkiyeburslari.gov.tr/scholarshipsprograms

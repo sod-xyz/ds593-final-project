@@ -1,0 +1,26 @@
+Churchill Scholarship (United Kingdom, U.S. citizens only)
+
+The Churchill Scholarship supports one year of graduate study in science, mathematics, and engineering at Churchill College, University of Cambridge. It is highly selective and restricted to U.S. citizens from participating institutions.
+
+Mongolia Eligibility:
+- Mongolian citizens are not eligible unless they are also U.S. citizens and meet the participating institution requirements.
+
+Eligibility:
+- Applicants must be citizens of the United States.
+- Applicants must be enrolled at or recently graduated from a participating institution.
+- Applicants must hold a bachelor's degree by the time they take up the scholarship.
+- Applicants are usually in STEM fields.
+
+Degree Level:
+- Master's / Graduate study
+
+Language Requirement:
+- Requirement type: required
+- Details: English proficiency is required for study at Cambridge.
+
+Funding:
+- Funding type: fully_funded_with_stipend
+- Details: Typically covers tuition, living allowance, travel, and related study costs.
+
+Source:
+https://www.churchillscholarship.org/the-scholarship
