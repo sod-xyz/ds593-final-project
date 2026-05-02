@@ -382,14 +382,7 @@ Therefore, the evaluation should be treated as a **diagnostic analysis** of the 
 
 ---
 
-## 7. Current Status of Results
-
-The uploaded repository defines evaluation scripts, but the packed version did **not** include committed result CSV files because `results/` is ignored by `.gitignore`. Therefore, anyone reviewing the repository cannot verify the exact numeric claims unless they rerun the evaluation.
-
-Before final submission, run the evaluation scripts and paste the final metrics into the table below. Also commit either:
-
-- `reports/results_summary.md`, or
-- selected CSV summaries under a tracked directory such as `reports/results/`.
+## 7. Results/Findings
 
 ### 7.1 Main Evaluation (English)
 
@@ -431,7 +424,7 @@ The hybrid retriever has the strongest retrieval recall@5 (**0.539**), meaning i
 | English | 0.455 | 0.544 | 0.473 | 0.727 | 0.782 | 0.448 | 0.565 |
 | Mongolian | 0.368 | 0.512 | 0.407 | 0.900 | 1.000 | 0.503 | 0.670 |
 
-**Interpretation:** The Mongolian evaluation is not exactly satisfactory. Mongolian questions achieved Hit@10 = **1.000**, meaning that the correct scholarship evidence usually appears somewhere in the top 10 retrieved records. However, Mongolian F1 = **0.407**, lower than English F1 = **0.473**. This suggests that translation and answer selection remain weaker than retrieval alone. Perhaps maybe a cause of how I phrased the question as Mongolian words have a lot of nuances so some things could be lost in translation.
+**Interpretation:** The Mongolian evaluation is not exactly satisfactory. Mongolian questions achieved Hit@10 = **1.000**, meaning that the correct scholarship evidence usually appears somewhere in the top 10 retrieved records. However, Mongolian F1 = **0.407**, lower than English F1 = **0.473**. This suggests that translation and answer selection remain weaker than retrieval alone. Perhaps maybe a cause of how I phrased the 10 questions as Mongolian words have a lot of nuances so some things could be lost in translation.
 
 The multilingual pipeline works by detecting Mongolian Cyrillic in `src/multilingual.py`, translating the query into English with an OpenAI model when an API key is available, and then using the same English retrieval pipeline. If no API key is available, the system returns the original Mongolian question, which can reduce retrieval quality because the corpus is mostly English, but in our results case it performed as intended.
 
@@ -626,8 +619,6 @@ python -m evaluation.evaluate_chunks
 │   ├── multilingual.py
 │   ├── rag.py
 │   └── utils.py
-├── reports/
-│   └── REVIEW_AND_RECOMMENDATIONS.md
 ├── requirements.txt
 └── README.md
 ```
