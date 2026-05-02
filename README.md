@@ -8,6 +8,25 @@ This repository implements and evaluates a retrieval-augmented generation (RAG) 
 
 ---
 
+## Table of Contents
+
+1. [Executive Summary](#1-executive-summary)
+2. [Research Question](#2-research-question)
+3. [Dataset](#3-dataset)
+4. [System Architecture](#4-system-architecture)
+5. [Methods Compared](#5-methods-compared)
+6. [Evaluation Design](#6-evaluation-design)
+7. [Final Results](#7-final-results)
+8. [Error Analysis](#8-error-analysis)
+9. [Iteration and Reflection](#9-iteration-and-reflection)
+10. [Ethical Considerations and Limitations](#10-ethical-considerations-and-limitations)
+11. [Reproducibility Instructions](#11-reproducibility-instructions)
+12. [Repository Structure](#12-repository-structure)
+13. [Technical Issues and Future Recommendations](#13-technical-issues-and-future-recommendations)
+14. [References](#14-references)
+15. [AI Assistance Disclosure](#15-ai-assistance-disclosure)
+16. [Final Comments](#16-final-comments)
+
 ## 1. Executive Summary / Motivation
 
 Many Mongolian scholarship seekers face a real information-access problem. Scholarship information is scattered across official websites, often written in English, and described using eligibility rules that are difficult to interpret. This can be especially difficult for students who do not have access to college counselors, professional application advisors, or family members who have already studied abroad.
@@ -150,7 +169,7 @@ The final system first searches the scholarship database in two ways: by matchin
 
 ## 6. Evaluation Design
 
-This project evaluates the "assistant" as a **set prediction task**. Each test question has an expected set of scholarship names, and the system returns a predicted set of scholarship names.
+This project evaluates the assistant as a **set prediction task**. Each test question has an expected set of scholarship names, and the system also returns a set of predicted scholarship names. Both are written as semicolon-separated lists.
 
 For example:
 
@@ -159,160 +178,187 @@ Expected:
 MEXT Scholarship; Global Korea Scholarship
 
 Predicted:
-MEXT Scholarship; Australia Awards Scholarship
+MEXT Scholarship; Australia Awards
 ```
 
 In this case:
 
-MEXT Scholarship is a true positive because it was expected and returned.
-Australia Awards Scholarship is a false positive because it was returned but not expected.
-Global Korea Scholarship is a false negative because it was expected but missed.
+1. `MEXT Scholarship` is a true positive because it was expected and returned.
+2. `Australia Awards` is a false positive because it was returned but not expected.
+3. `Global Korea Scholarship` is a false negative because it was expected but missed.
 
 This setup is useful because scholarship search is often a multi-answer task. A user may ask for scholarships for a specific country, degree level, or applicant background, and more than one scholarship may be relevant.
 
-6.1 Generation Metrics
+### 6.1 Generation Metrics
 
 The final LLM answer is parsed as a set of scholarship names and compared with the expected set for each evaluation question.
 
-Metric	Meaning	Why it matters
-Precision	Share of returned scholarships that are expected	Shows whether the system avoids recommending irrelevant or unsupported scholarships
-Recall	Share of expected scholarships recovered	Shows whether the system finds the relevant opportunities it should return
-F1	Harmonic mean of precision and recall	Gives one combined score balancing precision and recall
-Unsupported hallucination	Whether the system returned at least one unsupported scholarship	Captures cases where the model recommends a scholarship not supported by the expected answer set
-Wrong answer rate	Whether the predicted set differs from the expected set	Measures whether the full answer set was not exactly correct
-Precision
+| Metric | Meaning | Why it matters |
+|---|---|---|
+| Precision | Share of returned scholarships that are expected | Shows whether the system avoids recommending irrelevant or unsupported scholarships |
+| Recall | Share of expected scholarships recovered | Shows whether the system finds the relevant opportunities it should return |
+| F1 | Harmonic mean of precision and recall | Gives one combined score balancing precision and recall |
+| Unsupported hallucination | Whether the system returned at least one unsupported scholarship | Captures cases where the model recommends a scholarship not supported by the expected answer set |
+| Wrong answer rate | Whether the predicted set differs from the expected set | Measures whether the full answer set was not exactly correct |
+
+#### Precision
 
 Precision answers the question:
 
-Of the scholarships the system returned, how many were actually correct?
+> Of the scholarships the system returned, how many were actually correct?
 
 High precision means the assistant is careful and avoids recommending scholarships that are irrelevant, unsupported, or not appropriate for the query.
 
 This is especially important for scholarship search because a wrong recommendation can waste a user's time or mislead them during an application process.
 
-Recall
+#### Recall
 
 Recall answers the question:
 
-Of the scholarships the system should have returned, how many did it find?
+> Of the scholarships the system should have returned, how many did it find?
 
 High recall means the assistant successfully finds most of the relevant opportunities in the corpus.
 
 Recall is important because missing a relevant scholarship may cause a user to overlook a valuable funding opportunity.
 
-F1
+#### F1
 
 F1 combines precision and recall into one score:
 
+```text
 F1 = 2 × (Precision × Recall) / (Precision + Recall)
+```
 
 F1 is useful because the system must balance two goals:
 
-avoid returning wrong scholarships;
-avoid missing relevant scholarships.
+1. Avoid returning wrong scholarships.
+2. Avoid missing relevant scholarships.
 
 However, F1 should not be interpreted by itself. Two systems can have similar F1 scores but behave very differently. One system may be conservative with high precision and low recall, while another may return many results with higher recall but lower precision.
 
-Unsupported Hallucination
+#### Unsupported Hallucination
 
 Unsupported hallucination measures whether the system returned at least one scholarship that was not supported by the expected answer set.
 
-This metric matters because one of the main goals of using RAG is to reduce hallucination. A general-purpose LLM may generate fluent but incorrect scholarship advice. The RAG system is supposed to reduce this risk by forcing the model to answer from retrieved scholarship records.
+This metric matters because one of the main goals of using RAG is to reduce hallucination. A general-purpose LLM may generate fluent but incorrect scholarship advice. The RAG system is supposed to reduce this risk by forcing the model to answer from the retrieved scholarship records.
 
-Wrong Answer Rate
+#### Wrong Answer Rate
 
 Wrong answer rate is stricter than F1. It checks whether the predicted set differs from the expected set at all.
 
 An answer is counted as wrong if:
 
-it misses one expected scholarship;
-it adds one incorrect scholarship;
-it returns a completely different set;
-it returns NONE when scholarships were expected;
-it returns scholarships when the expected answer was NONE.
+1. It misses one expected scholarship.
+2. It adds one incorrect scholarship.
+3. It returns a completely different set.
+4. It returns `NONE` when scholarships were expected.
+5. It returns scholarships when the expected answer was `NONE`.
 
-This metric is useful because it shows how often the system gives a fully correct answer, but it can be harsh for multi-answer questions.
+This metric is strong because it shows how often the system gives a fully correct answer, but it can be harsh for multi-answer questions.
 
-6.2 Retrieval Metrics
+### 6.2 Retrieval Metrics
 
 Retrieval is evaluated separately from generation. This is important because a RAG system has two major stages:
 
-The retriever must find the correct scholarship records.
-The LLM must select the correct scholarship names from the retrieved context.
+1. The retriever must find the correct scholarship records.
+2. The LLM must select the correct scholarship names from the retrieved context.
 
 If the retriever fails, the LLM cannot produce a grounded correct answer because the necessary evidence was never included in the prompt.
 
-Metric	Meaning	Why it matters
-hit_at_k	At least one expected scholarship appears in the top-k retrieved records	Shows whether retrieval found any relevant evidence
-retrieval_recall_at_k	Share of expected scholarships appearing in the top-k retrieved records	Shows how completely retrieval recovered the correct evidence
-retrieval_precision_at_k	Share of top-k retrieved records that are expected answers	Shows how much irrelevant context is being passed to the LLM
-hit_at_k
+| Metric | Meaning | Why it matters |
+|---|---|---|
+| Hit@k | At least one expected scholarship appears in the top-k retrieved records | Shows whether retrieval found any relevant evidence |
+| Retrieval Recall@k | Share of expected scholarships appearing in the top-k retrieved records | Shows how completely retrieval recovered the correct evidence |
+| Retrieval Precision@k | Share of top-k retrieved records that are expected answers | Shows how much irrelevant context is being passed to the LLM |
 
-hit_at_k checks whether at least one correct scholarship appears in the top-k retrieved records.
+#### Hit@k
 
-For example, if k = 5, the metric asks:
+Hit@k checks whether at least one correct scholarship appears in the top-k retrieved records.
 
-Did at least one expected scholarship appear in the top 5 retrieved records?
+For example, if `k = 5`, the metric asks:
+
+> Did at least one expected scholarship appear in the top 5 retrieved records?
 
 This is a useful but forgiving metric. It tells us whether the retriever found something relevant, but it does not show whether it found all relevant scholarships.
 
-retrieval_recall_at_k
+#### Retrieval Recall@k
 
-retrieval_recall_at_k measures how many of the expected scholarships appeared in the top-k retrieved records.
+Retrieval Recall@k measures how many of the expected scholarships appeared in the top-k retrieved records.
 
 For example, if a question has four expected scholarships and the retriever finds two of them in the top 5, then:
 
-retrieval_recall_at_5 = 2 / 4 = 0.50
+```text
+Retrieval Recall@5 = 2 / 4 = 0.50
+```
 
 This metric is very important for multi-answer scholarship questions. If the correct scholarship is not retrieved, the LLM is unlikely to include it in the final answer.
 
-retrieval_precision_at_k
+#### Retrieval Precision@k
 
-retrieval_precision_at_k measures how many of the retrieved records are actually expected answers.
+Retrieval Precision@k measures how many of the retrieved records are actually expected answers.
 
 For example, if the top 5 retrieved records contain two expected scholarships and three irrelevant scholarships, then:
 
-retrieval_precision_at_5 = 2 / 5 = 0.40
+```text
+Retrieval Precision@5 = 2 / 5 = 0.40
+```
 
 Low retrieval precision means the LLM receives noisy context. This can cause the model to select the wrong scholarship names or return extra unsupported results.
 
-6.3 Why Retrieval and Generation Are Evaluated Separately
+### 6.3 Why Retrieval and Generation Are Evaluated Separately
 
 Separating retrieval and generation helps identify where the system fails.
 
-A RAG system can fail in at least two ways:
+A RAG system can fail in at least two ways.
 
-Case 1: Retrieval failure
+#### Case 1: Retrieval Failure
 
 The retriever does not find the correct scholarship records.
 
 This may happen because:
 
-the user query uses different wording from the corpus;
-the corpus does not contain enough synonyms;
-country names are written inconsistently;
-degree levels are missing or ambiguous;
-scholarship eligibility is described indirectly;
-metadata fields are incomplete;
-the retriever overweights surface-level keyword matches.
+1. The user query uses different wording from the corpus.
+2. The corpus does not contain enough synonyms.
+3. Country names are written inconsistently.
+4. Degree levels are missing or ambiguous.
+5. Scholarship eligibility is described indirectly.
+6. Metadata fields are incomplete.
+7. The retriever overweight's surface-level keyword matches.
 
 In this case, the LLM cannot answer correctly because the correct evidence is missing from the prompt.
 
-Case 2: Generation failure
+#### Case 2: Generation Failure
 
 The retriever finds the correct scholarship records, but the LLM still returns the wrong answer.
 
 This may happen because:
 
-the prompt is not restrictive enough;
-the retrieved context contains too many similar scholarships;
-the LLM returns extra names;
-the LLM misses one of the retrieved correct scholarships;
-the output format is not followed exactly;
-scholarship names are not normalized consistently;
-the parser fails to match slightly different versions of the same name.
+1. The prompt is not restrictive enough.
+2. The retrieved context contains too many similar scholarships.
+3. The LLM returns extra names.
+4. The LLM misses one of the retrieved correct scholarships.
+5. The output format is not followed exactly.
+6. Scholarship names are not normalized consistently.
+7. The parser fails to match slightly different versions of the same name.
 
 In this case, the retrieval system may be working, but the answer-selection step needs improvement.
+
+### 6.4 Limitations of the Evaluation
+
+F1 is useful, but it is not enough. The purpose of evaluation is not only to report one score, but to understand why the system succeeds or fails.
+
+Important limitations include:
+
+1. The number of scholarship records is small.
+2. Evaluation labels are manually created.
+3. Some expected answers are debatable.
+4. Some questions have multiple reasonable answers.
+5. The corpus may not contain all relevant scholarships.
+6. Scholarship names require exact or near-exact normalization.
+7. Some programs have conditional eligibility that is difficult to score as simply correct or incorrect.
+8. The Mongolian evaluation set has only 10 questions.
+
+Therefore, the evaluation should be treated as a diagnostic analysis of the pipeline rather than a final measure of a launch-ready tool.
 
 ### 6.4 Limitations of the Evaluation
 
@@ -332,7 +378,8 @@ Important limitations include:
 - possible mismatch between user wording and scholarship descriptions;
 - reliance on exact scholarship-name matching during evaluation.
 
-Therefore, the evaluation should be treated as a **diagnostic analysis** of the pipeline rather than a final measure of ready to launch tool.
+Therefore, the evaluation should be treated as a **diagnostic analysis** of the pipeline.
+
 ---
 
 ## 7. Current Status of Results
@@ -353,7 +400,7 @@ Before final submission, run the evaluation scripts and paste the final metrics 
 | Dense embedding RAG | 0.499 | 0.492 | 0.472 | 0.745 | 0.510 | Best F1 among the three basic retrievers |
 | Hybrid RAG | 0.500 | 0.510 | 0.474 | 0.727 | 0.539 | Best retrieval recall@5 among basic retrievers |
 
-**Interpretation.** Retrieval improves over the no-retrieval baseline. The no-retrieval baseline has F1 = **0.385**, while the three RAG systems reach F1 values between **0.459** and **0.474**. This shows that grounding the LLM in retrieved scholarship records helps, but the improvement is moderate rather than dramatic.
+**Interpretation:** Retrieval improves over the no-retrieval baseline. The no-retrieval baseline has F1 = **0.385**, while the three RAG systems reach F1 values between **0.459** and **0.474**. This shows that grounding the LLM in retrieved scholarship records helps, but the improvement is moderate rather than dramatic.
 
 The hybrid retriever has the strongest retrieval recall@5 (**0.539**), meaning it is best at putting relevant scholarship evidence into the context. However, dense embedding RAG has the highest generation F1 among the three basic retrievers (**0.472**). This suggests that retrieval quality and final answer quality are related but not identical. The LLM can still make selection errors even when relevant records are retrieved.
 
@@ -365,7 +412,7 @@ The hybrid retriever has the strongest retrieval recall@5 (**0.539**), meaning i
 | Metadata-aware hybrid RAG | 10 | 0.465 | 0.568 | 0.485 | 0.818 | 0.873 | 0.539 | 0.656 |
 | Metadata-aware hybrid RAG | 15 | 0.486 | 0.619 | 0.515 | 0.818 | 0.873 | 0.539 | 0.656 |
 
-**Interpretation.** Increasing top-k improves recall but also increases the amount of context passed to the LLM. The strongest F1 in this experiment occurs at **k = 15**, with F1 = **0.515** and recall = **0.619**. This makes sense for scholarship search because many questions have multiple valid answers. However, larger k can also increase noise, which may cause over-selection.
+**Interpretation:** Increasing top-k improves recall but also increases the amount of context passed to the LLM. The strongest F1 in this experiment occurs at **k = 15**, with F1 = **0.515** and recall = **0.619**. This makes sense for scholarship search because many questions have multiple valid answers. However, larger k can also increase noise, which may cause over-selection.
 
 ### 7.3 Chunk-Size Experiment
 
@@ -375,7 +422,7 @@ The hybrid retriever has the strongest retrieval recall@5 (**0.539**), meaning i
 | 600 | 0.506 | 0.538 | 0.484 | 0.727 | 0.539 |
 | 900 | 0.506 | 0.519 | 0.481 | 0.727 | 0.539 |
 
-**Interpretation.** Chunk size had only a small effect. The best F1 was with chunk size **600** at **0.484**. This is expected because each scholarship record is already short and structured. Chunking is more important for long documents, while this corpus behaves more like a collection of compact records.
+**Interpretation:** Chunk size had only a small effect. The best F1 was with chunk size **600** at **0.484**. This is expected because each scholarship record is already short and structured. Chunking is more important for long documents, while this corpus behaves more like a collection of compact records.
 
 ### 7.4 Multilingual Evaluation
 
@@ -384,11 +431,9 @@ The hybrid retriever has the strongest retrieval recall@5 (**0.539**), meaning i
 | English | 0.455 | 0.544 | 0.473 | 0.727 | 0.782 | 0.448 | 0.565 |
 | Mongolian | 0.368 | 0.512 | 0.407 | 0.900 | 1.000 | 0.503 | 0.670 |
 
-**Interpretation.** The Mongolian evaluation is not exactly satisfactory. Mongolian questions achieved Hit@10 = **1.000**, meaning that the correct scholarship evidence usually appears somewhere in the top 10 retrieved records. However, Mongolian F1 = **0.407**, lower than English F1 = **0.473**. This suggests that translation and answer selection remain weaker than retrieval alone. Perhaps maybe a cause of how I phrased the question as Mongolian words have a lot of nuances so some things could be lost in translation.
+**Interpretation:** The Mongolian evaluation is not exactly satisfactory. Mongolian questions achieved Hit@10 = **1.000**, meaning that the correct scholarship evidence usually appears somewhere in the top 10 retrieved records. However, Mongolian F1 = **0.407**, lower than English F1 = **0.473**. This suggests that translation and answer selection remain weaker than retrieval alone. Perhaps maybe a cause of how I phrased the question as Mongolian words have a lot of nuances so some things could be lost in translation.
 
 The multilingual pipeline works by detecting Mongolian Cyrillic in `src/multilingual.py`, translating the query into English with an OpenAI model when an API key is available, and then using the same English retrieval pipeline. If no API key is available, the system returns the original Mongolian question, which can reduce retrieval quality because the corpus is mostly English, but in our results case it performed as intended.
-
----
 
 ---
 
@@ -405,7 +450,7 @@ The evaluation shows that the system is semi-successful: retrieval helps, but ma
 | Metadata conflict | Metadata and question imply different eligibility | Some scholarships are marked conditional or not eligible but still appear in expected labels |
 | Name mismatch | Same scholarship appears under slightly different names | Hyphen/en-dash and official-name variations affect exact matching |
 | Multilingual loss | Mongolian query loses a constraint during translation | Translation may preserve country but weaken degree/funding/work-experience constraints |
-| Small-corpus limitation | The correct answer may be outside the curated corpus | The system cannot recommend opportunities that are not in `documents.json` |
+| Small-corpus limitation | The correct answer may be outside the curated corpus | The system cannot recommend opportunities that are not in our curated `documents.json` |
 
 ### Specific Examples:
 
@@ -437,7 +482,6 @@ In the end, I decided not to rely on synthetic scholarship records for final eva
 
 I also considered using public Kaggle scholarship datasets. However, many of the available datasets were U.S.-focused, undergraduate-focused, or not clearly relevant to Mongolian applicants. Including them would have increased the number of records but weakened the project scope much similar to the synthetic data attempt. Since the research question focuses on Mongolian students and international opportunities, adding many U.S.-only scholarships would have made retrieval noisier and less useful. More data =/= Better data.
 
-
 ### 9.4 Final Design Decision
 
 The final system uses a small, curated corpus with metadata-specific retrieval. This made the project semi-successful. The evaluation shows that retrieval improves over a no-retrieval baseline, especially for country-specific and structured queries. However, the scores also show that the system is not ready for real deployment. The small corpus limits coverage, and the manually written labels make some evaluation cases debatable.
@@ -453,7 +497,6 @@ The final system uses a small, curated corpus with metadata-specific retrieval. 
 7. Evaluate answer helpfulness with human reviewers, not only exact-match F1.
 
 ---
-
 
 ## 10. Ethical Considerations and Limitations
 
@@ -472,6 +515,7 @@ Main risks:
 
 This project reduces some risk by constraining the model to known scholarship names and evaluating unsupported hallucinations. However, those safeguards are not enough for real deployment. A production version would need citations, source freshness checks, uncertainty labels, human review, and privacy protections.
 
+---
 
 ## 11. Reproducibility Instructions
 
@@ -590,7 +634,6 @@ python -m evaluation.evaluate_chunks
 
 ---
 
-
 ## 13. References
 This was my first time building a complete RAG pipeline, so the project involved a significant amount of learning, experimentation, debugging, and iteration. I relied heavily on concepts introduced in class discussions, course labs, and portfolio pieces.
 
@@ -635,9 +678,7 @@ The scholarship corpus was manually curated from official or semi-official schol
 - Schwarzman Scholars
 - Rotary Peace Fellowship
 
-### AI Assistance Disclosure
-
-This project was primarily designed, implemented, evaluated, and documented by myself. VS Code Copilot was used as an assistive development tool for code implementation, debugging, refactoring, and repository organization. I made all final decisions regarding the system design, curated scholarship dataset, retrieval pipeline, evaluation methodology, interpretation of results, limitations, documentation, etc. 
+> **AI Assistance Disclosure:** This project was primarily designed, implemented, evaluated, and documented by myself. VS Code Copilot was used as an assistive development tool for code implementation, debugging, refactoring, and repository organization. I made all final decisions regarding the system design, curated scholarship dataset, retrieval pipeline, evaluation methodology, interpretation of results, limitations, documentation, etc. 
 
 ---
 
