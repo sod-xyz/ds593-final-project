@@ -24,6 +24,8 @@ This project tests whether a small, domain-specific RAG system filled can make s
 
 The final result is a useful prototype and project of reference, but not a deployable advising system. The best-performing English RAG configuration reaches an F1 of about **0.47–0.51**, depending on whether the comparison is basic hybrid retrieval or metadata-aware top-k retrieval. This is better than the no-retrieval label-selection baseline F1 of **0.385**, but still leaves significant errors. The project is therefore best understood as a diagnostic study of what works and fails in a small scholarship-focused RAG system.
 
+The final result is a useful prototype and project of reference for small corpus project, but not a deployable system. The best-performing basic English RAG configuration reaches an F1 of about **0.456**, while the best metadata-aware top-k configuration reaches an F1 of about **0.476**. This is better than the no-retrieval label-selection baseline F1 of **0.348**, but it still leaves significant errors. The project is therefore best understood and received as a diagnostic study of what works and fails in a small scholarship-focused RAG system.
+
 ---
 
 ## 2. Research Question
