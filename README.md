@@ -360,26 +360,6 @@ Important limitations include:
 
 Therefore, the evaluation should be treated as a diagnostic analysis of the pipeline rather than a final measure of a launch-ready tool.
 
-### 6.4 Limitations of the Evaluation
-
-For this project, F1 is useful, but it is not enough. The purpose of evaluation is not only to report a single score, but to understand why the system succeeds or fails.
-
-As mentioned in the executive summary, this project is a working prototype built on a small curated corpus. Therefore, the evaluation scores should be interpreted carefully. Low scores may reflect limitations of the project design and dataset, not only weaknesses in the RAG approach itself.
-
-Important limitations include:
-
-- a small number of scholarship records;
-- manually created evaluation labels;
-- incomplete scholarship metadata;
-- ambiguous natural-language questions;
-- multiple reasonable answers for some queries;
-- difficulty distinguishing eligibility, country, degree level, and funding type;
-- limited coverage of real scholarship opportunities;
-- possible mismatch between user wording and scholarship descriptions;
-- reliance on exact scholarship-name matching during evaluation.
-
-Therefore, the evaluation should be treated as a **diagnostic analysis** of the pipeline.
-
 ---
 
 ## 7. Results/Findings
